@@ -28,6 +28,14 @@ import {
   YAxis,
 } from "recharts";
 
+// Set VITE_API_BASE_URL in the hosting environment for a separately deployed API.
+// When unset, requests remain relative so local development can use the Vite proxy.
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+
+function apiUrl(path) {
+  return `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
 const money = new Intl.NumberFormat("en-ZA", {
   style: "currency",
   currency: "ZAR",
@@ -148,10 +156,10 @@ function App() {
           stockResponse,
           healthResponse,
         ] = await Promise.all([
-          fetch(summaryUrl),
-          fetch(productsUrl),
-          fetch(`/reports/low-stock?threshold=${appliedThreshold}`),
-          fetch(`/reports/inventory-health?threshold=${appliedThreshold}`),
+          fetch(apiUrl(summaryUrl)),
+          fetch(apiUrl(productsUrl)),
+          fetch(apiUrl(`/reports/low-stock?threshold=${appliedThreshold}`)),
+          fetch(apiUrl(`/reports/inventory-health?threshold=${appliedThreshold}`)),
         ]);
 
         const responses = [
@@ -209,7 +217,7 @@ function App() {
   const chartData = topProducts.map((product) => ({
     name:
       product.product_name.length > 18
-        ? `${product.product_name.slice(0, 18)}…`
+        ? `${product.product_name.slice(0, 18)}â€¦`
         : product.product_name,
     units: Number(product.units_sold),
   }));
@@ -285,7 +293,7 @@ function App() {
           <div className="sidebar-footer">
             Smart Business Operations Platform
             <br />
-            Portfolio project · Local development
+            Portfolio project Â· Local development
           </div>
         </div>
       </aside>
@@ -443,7 +451,7 @@ function App() {
               <span className="period-tag">
                 <Clock3 size={14} />
                 {appliedStartDate && appliedEndDate
-                  ? `${appliedStartDate} – ${appliedEndDate}`
+                  ? `${appliedStartDate} â€“ ${appliedEndDate}`
                   : "All available dates"}
               </span>
             </div>
