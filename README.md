@@ -1,6 +1,13 @@
 # Smart Business Operations Platform
 
-A full-stack portfolio project for managing day-to-day business operations and turning sales and inventory records into measurable business insights. The platform combines a **FastAPI** backend, **PostgreSQL** database, and **React + Vite** dashboard.
+A web-based business management system designed to help businesses manage products, inventory, customers and sales while monitoring business performance through an analytics dashboard.
+
+**Live Demo:** https://smart-business-operations-frontend.onrender.com/
+**Backend API:** https://smart-business-operations-platform.onrender.com/
+**API Documentation:** https://smart-business-operations-platform.onrender.com/docs
+**Source Code:** https://github.com/euginerams/smart-business-operations-platform
+
+> Note: the live demo is hosted on Render's free tier and may take up to a minute to load on first visit while the service wakes up from idle.
 
 > **Demo data notice:** all products, customers, and sales in this project are fictional sample records created for demonstration. Running `seed_demo_data.py` on a fresh database will recreate the original `DEMO-*` labelled dataset.
 
@@ -51,6 +58,7 @@ A full-stack portfolio project for managing day-to-day business operations and t
 | Data access | SQLAlchemy |
 | Database | PostgreSQL with Psycopg 3 driver |
 | Backend testing | Pytest, HTTPX, SQLite-based test fixtures |
+| Hosting | Render (frontend static site + backend web service) |
 
 ## Architecture
 
@@ -214,7 +222,7 @@ The generated production assets are written to `frontend/dist/`, which is exclud
 
 ## API overview
 
-The interactive API documentation at `/docs` is the source of truth for request and response schemas. Main route groups include:
+The interactive API documentation at `/docs` is the source of truth for request and response schemas (locally at `/docs`, or live at the Backend API link above). Main route groups include:
 
 - `/products` — product management
 - `/customers` — customer management
