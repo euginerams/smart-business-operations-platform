@@ -1,4 +1,3 @@
-
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, status
@@ -39,10 +38,12 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Allow the deployed frontend to communicate with the API.
+# Allow the local and deployed frontends to communicate with the API.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
         "https://smart-business-operations-frontend.onrender.com",
     ],
     allow_credentials=False,

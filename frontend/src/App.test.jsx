@@ -39,6 +39,15 @@ vi.mock("recharts", () => {
   };
 });
 
+function requestPath(input) {
+  const parsed = new URL(String(input), "http://localhost");
+  return `${parsed.pathname}${parsed.search}`;
+}
+
+function wasRequestMade(path) {
+  return global.fetch.mock.calls.some(([input]) => requestPath(input) === path);
+}
+
 function mockResponse(data, ok = true, status = 200) {
   return Promise.resolve({
     ok,
@@ -89,20 +98,21 @@ function setupSuccessfulFetch() {
     inventory_value: "2500.00",
   };
 
-  global.fetch = vi.fn((url) => {
-    if (url.startsWith("/reports/summary")) {
+  global.fetch = vi.fn((input) => {
+    const path = requestPath(input);
+    if (path.startsWith("/reports/summary")) {
       return mockResponse(summary);
     }
 
-    if (url.startsWith("/reports/top-products")) {
+    if (path.startsWith("/reports/top-products")) {
       return mockResponse(topProducts);
     }
 
-    if (url.startsWith("/reports/low-stock")) {
+    if (path.startsWith("/reports/low-stock")) {
       return mockResponse(lowStock);
     }
 
-    if (url.startsWith("/reports/inventory-health")) {
+    if (path.startsWith("/reports/inventory-health")) {
       return mockResponse(inventoryHealth);
     }
 
@@ -139,9 +149,7 @@ describe("Smart Business Operations dashboard", () => {
       await screen.findByText(/1\s*500,00/),
     ).toBeInTheDocument();
 
-    expect(global.fetch).toHaveBeenCalledWith(
-      "/reports/inventory-health?threshold=5",
-    );
+    expect(wasRequestMade("/reports/inventory-health?threshold=5")).toBe(true);
   });
 
   it("requests updated inventory reports when the threshold changes", async () => {
@@ -162,13 +170,8 @@ describe("Smart Business Operations dashboard", () => {
     );
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/reports/inventory-health?threshold=10",
-      );
-
-      expect(global.fetch).toHaveBeenCalledWith(
-        "/reports/low-stock?threshold=10",
-      );
+      expect(wasRequestMade("/reports/inventory-health?threshold=10")).toBe(true);
+      expect(wasRequestMade("/reports/low-stock?threshold=10")).toBe(true);
     });
   });
 
