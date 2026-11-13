@@ -1,6 +1,8 @@
+
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -35,6 +37,17 @@ app = FastAPI(
     ),
     version="0.6.0",
     lifespan=lifespan,
+)
+
+# Allow the deployed frontend to communicate with the API.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://smart-business-operations-frontend.onrender.com",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 app.include_router(products_router)
@@ -75,6 +88,6 @@ def database_health_check(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=(
                 "Database connection failed. "
-                "Check the local configuration."
+                "Check the database configuration."
             ),
         ) from None
