@@ -2,14 +2,19 @@
 
 A full-stack portfolio project for managing day-to-day business operations and turning sales and inventory records into measurable business insights. The platform combines a **FastAPI** backend, **PostgreSQL** database, and **React + Vite** dashboard.
 
-> **Demo data notice:** `seed_demo_data.py` creates clearly labelled sample records (`DEMO-*` SKUs) for demonstrations. Treat these as fictional data, not real business performance.
+> **Demo data notice:** all products, customers, and sales in this project are fictional sample records created for demonstration. Running `seed_demo_data.py` on a fresh database will recreate the original `DEMO-*` labelled dataset.
 
 ## Dashboard preview
 
-![Smart Business Operations dashboard overview](docs/screenshots/dashboard-overview.png)
-
+![Smart Business Operations dashboard overview, dark mode](docs/screenshots/dashboard-overview-dark.png)
+![Customer management, light mode](docs/screenshots/dashboard-customers-light.png)
+![Inventory management, dark mode](docs/screenshots/dashboard-inventory-dark.png)
 
 ## Features
+
+### Dashboard experience
+- Light and dark themes (follows your system setting and remembers your choice)
+- Responsive layout for desktop, tablet, and mobile
 
 ### Products and inventory
 - Create, list, update, and deactivate products.
